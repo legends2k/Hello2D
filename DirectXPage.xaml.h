@@ -25,9 +25,6 @@ namespace Hello2D
 		void LoadInternalState(Windows::Foundation::Collections::IPropertySet^ state);
 
 	private:
-		// XAML low-level rendering event handler.
-		void OnRendering(Platform::Object^ sender, Platform::Object^ args);
-
 		// Window event handlers.
 		void OnVisibilityChanged(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::VisibilityChangedEventArgs^ args);
 
@@ -54,6 +51,7 @@ namespace Hello2D
 		std::shared_ptr<DX::DeviceResources> m_deviceResources;
 		std::unique_ptr<Hello2DMain> m_main; 
 		bool m_windowVisible;
+		void Page_KeyUp(Platform::Object^ sender, Windows::UI::Xaml::Input::KeyRoutedEventArgs^ e);
 	};
 }
 

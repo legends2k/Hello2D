@@ -194,3 +194,12 @@ void DirectXPage::OnSwapChainPanelSizeChanged(Object^ sender, SizeChangedEventAr
 	m_deviceResources->SetLogicalSize(e->NewSize);
 	m_main->CreateWindowSizeDependentResources();
 }
+
+
+void Hello2D::DirectXPage::Page_KeyUp(Platform::Object^ sender, Windows::UI::Xaml::Input::KeyRoutedEventArgs^ e)
+{
+	if (e->Key == Windows::System::VirtualKey::Escape)
+	{
+		Application::Current->Exit();
+	}
+}

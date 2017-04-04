@@ -22,6 +22,10 @@ namespace Hello2D
 
 	private:
 		void MakeScenery();
+		void MakeLeftMountain();
+		void MakeRightMountain();
+		void MakeSun();
+		void MakeRiver();
 
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources>            m_deviceResources;

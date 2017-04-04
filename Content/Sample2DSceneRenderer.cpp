@@ -71,7 +71,17 @@ void Sample2DSceneRenderer::Render()
 	context->BeginDraw();
 	context->Clear(D2D1::ColorF(D2D1::ColorF::PapayaWhip));
 	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::OliveDrab, 1.f));
+	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::OliveDrab, 1.f));
 	context->FillGeometry(m_pathLeftMountain.Get(), m_strokeBrush.Get());
+
+	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
+	context->DrawGeometry(m_pathLeftMountain.Get(), m_strokeBrush.Get(), 1.f);
+
+	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::YellowGreen, 1.f));
+	context->FillGeometry(m_pathRightMountain.Get(), m_strokeBrush.Get());
+
+	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
+	context->DrawGeometry(m_pathRightMountain.Get(), m_strokeBrush.Get(), 1.f);
 	context->EndDraw();
 }
 
@@ -84,6 +94,12 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 
 // heartily lifted from https://msdn.microsoft.com/en-us/library/windows/desktop/ee264309(v=vs.85).aspx
 void Sample2DSceneRenderer::MakeScenery()
+{
+	MakeLeftMountain();
+	MakeRightMountain();
+}
+
+void Sample2DSceneRenderer::MakeLeftMountain()
 {
 	TIF(m_deviceResources->GetD2DFactory()->CreatePathGeometry(&m_pathLeftMountain));
 	ComPtr<ID2D1GeometrySink> pathCmds;
@@ -100,6 +116,31 @@ void Sample2DSceneRenderer::MakeScenery()
 		D2D1::Point2F(212, 160),
 		D2D1::Point2F(156, 255),
 		D2D1::Point2F(346, 255),
+	};
+	pathCmds->AddLines(points, ARRAYSIZE(points));
+	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);     // also has OPEN; leaves it open to append further figures to the geometry
+	TIF(pathCmds->Close());
+}
+
+void Sample2DSceneRenderer::MakeRightMountain()
+{
+	TIF(m_deviceResources->GetD2DFactory()->CreatePathGeometry(&m_pathRightMountain));
+	ComPtr<ID2D1GeometrySink> pathCmds;
+	m_pathRightMountain->Open(&pathCmds);
+
+	pathCmds->SetFillMode(D2D1_FILL_MODE_WINDING);
+	pathCmds->BeginFigure(
+		D2D1::Point2F(575, 263),
+		D2D1_FIGURE_BEGIN_FILLED        // also has HOLLOW a.k.a stroked
+	);
+	D2D1_POINT_2F points[] = {
+		D2D1::Point2F(481, 146),
+		D2D1::Point2F(449, 181),
+		D2D1::Point2F(433, 159),
+		D2D1::Point2F(401, 214),
+		D2D1::Point2F(381, 199),
+		D2D1::Point2F(323, 263),
+		D2D1::Point2F(575, 263)
 	};
 	pathCmds->AddLines(points, ARRAYSIZE(points));
 	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);     // also has OPEN; leaves it open to append further figures to the geometry
