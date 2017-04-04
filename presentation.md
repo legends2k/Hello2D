@@ -2,14 +2,14 @@
 % Sundaram Ramaswamy
 % April, 2017
 
-# Good ol' drawing
+# Good 'ol drawing
 
 1. Let's draw something simple!
 2. Map backwards by learning the theory :)
 3. See code to seal the understanding
 4. _Rise, repeat_
 
-> **Warning:** This is a primer.  Chances are you might know a lot more than the presenter and the presented!
+> **Disclaimer**: This is a primer.  Chances are you might know a lot more than the presenter and the presented!
 
 # Reasons
 
@@ -49,14 +49,13 @@
 
 # Path (contd.)
 
-* Usually has `move to`, `line to`, `curve to`, `arc`, …
+* Commands: `move to`, `line to`, `curve to`, `arc to`, …
     + Curves are quadratic and cubic Bézier curves
 * Each figure has `begin` and `end` (with/out `close`)
     + `close` closes by drawing a line between first and last points
-* Don't be intimidated by path drawing command languages
-    + They are shorthand notations for the above commands
-    + Without its cumbersome to construct figures
-    + Creation in code is manual; each command is a function
+* Don't be intimidated by path drawing languages
+    + Just shorthand notations for these commands
+    + It’s cumbersome to construct figures otherwise
     + [XAML](https://msdn.microsoft.com/en-us/library/ms752293.aspx): `M 10, 100 L 20, 100`
     + PDF: `10 100 m 20 100 l`
 * Represent any artibrary shape: polygon
@@ -107,19 +106,85 @@ The brush used by the artist has
 
 # Resource: Brushes
 
-Brushes, also called, pens do stroking & filling
+Brushes, also called, **pens** do stroking & filling
 
-Not necessarily solid colours; they can be
+Didn’t speak about its colour thus far; it can be
 
-+ Solid
-    * Refer the same colour always
-+ Position-based
-    + Gradient: colour based on a function
++ Constant
+    * Solid: refers the same colour always
++ Varies by position
+    + Gradient: get colour based on a function of position
         + Linear
         + Radial
     + Bitmap
-        * Refer colour from a lookup table
+        * Get colour from a lookup table
+
+# Concept: Colours
+
+* Need a precise way of representing colours
+* Colour spaces
+    + RGB
+    + HSV and HSL
+    + CMYK
+    + many more
+* Most rendering APIs work in RGB
+    + Additive colour system
+    + This is how display systems work
+    + Easy math: simple calculations
+* HSV is preferred by artists
+    + Most aesthetically pleasing
+    + Better for colour pickers
+
+# Pixel formats
+
+* Colour value is math; its realisation in hardware leads to
+
+> **Pixel**: picture element
+
+* Irrespective of colour space, data type decides richness
+    + Wider the format, richer the gamut
+* Integer formats: `0` darkest; `max(channel width)` brightest
+    + 32-bit pixel formats: `A8 R8 G8 B8`, `R8 G8 B8 A8`, …
+    + 24-bit pixel formats: `R8 G8 B8`, …
+    + 16-bit pixel formats: `R5 G6 B5`, `A4 R4 G4 B4`, `R5 G5 B5`, …
+    + 8-bit pixel formats: indexing a predefined colour palette
+* Floating-point formats: `0.0` darkest, `1.0` brightest
+    + Costly: `4 * 32 = 128` bits for RGBA
+    + Better for image manipulation
+* If exceeds during calculation, it's `clamp` ed by `min` and `max`
 
 # Concept: Interpolation
 
-* Given the extremes, find values in between
+**Idea**: Given two values, guess/find values in between
+
+> 0 ● ——————×—————— ○ 1
+
+* Colour at `0` is black `(0, 0, 0)`
+* Colour at `1` is white `(1, 1, 1)`
+* What's the colour at `½`?
+* It's pure grey: `(½, ½, ½)`.  But how?
+* Works with any values: position (any dimension), temperature, say even chilli hotness – scoville heat index, etc.
+
+# Linear Interpolation a.k.a lerp
+
+$$
+\boxed{L(t) = P_0 + t (P_1 - P_0)}
+$$
+
+\begin{align*}
+P_0 = (0, 0, 0) && P_1 = (1, 1, 1) \\
+L(0) = (0, 0, 0) && L(1) = (1, 1, 1) && L(\frac{1}{2}) = (\frac{1}{2}, \frac{1}{2}, \frac{1}{2})
+\end{align*}
+
+
+# Radial Interpolation
+
+# Bitmap Brushes
+
+# Tiling and Pattern Brushes
+
+# Transformations
+
+# Clipping
+
+# Text
