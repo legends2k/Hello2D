@@ -1,0 +1,42 @@
+# object files
+*.o
+*.obj
+*.lo
+*.slo
+
+# libraries
+*.a
+*.lib
+*.so
+*.so.*
+*.dll
+*.la
+*.lai
+
+# binaries
+*.out
+*.exe
+
+# Visual Studio
+*.sdf
+*.opensdf
+*.ncb
+*.suo
+*.filters
+*.ilk
+*.cachefile
+*.db
+*.opendb
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+_UpgradeReport_Files/
+Generated Files/
+ipch/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+*.mdf
+*.ldf
+FakesAssemblies/

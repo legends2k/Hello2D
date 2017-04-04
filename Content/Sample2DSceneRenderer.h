@@ -21,14 +21,20 @@ namespace Hello2D
 		bool IsTracking() { return m_tracking; }
 
 	private:
-		// Cached pointer to device resources.
-		std::shared_ptr<DX::DeviceResources> m_deviceResources;
+		void MakeScenery();
 
-		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_blueBrush;
+		// Cached pointer to device resources.
+		std::shared_ptr<DX::DeviceResources>            m_deviceResources;
+
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_strokeBrush;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathLeftMountain;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathRightMountain;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathSun;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathRiver;
 
 		// Variables used with the rendering loop.
-		bool	m_loadingComplete;
-		bool	m_tracking;
+		bool	                                        m_loadingComplete;
+		bool	                                        m_tracking;
 	};
 }
 

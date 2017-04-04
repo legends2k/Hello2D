@@ -12,6 +12,7 @@ namespace DX
 			throw Platform::Exception::CreateException(hr);
 		}
 	}
+	#define TIF(X) DX::ThrowIfFailed(X)
 
 	// Function that reads from a binary file asynchronously.
 	inline Concurrency::task<std::vector<byte>> ReadDataAsync(const std::wstring& filename)

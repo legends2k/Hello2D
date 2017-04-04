@@ -8,6 +8,8 @@ using namespace Hello2D;
 using namespace DirectX;
 using namespace Windows::Foundation;
 
+using Microsoft::WRL::ComPtr;
+
 // Loads vertex and pixel shaders from files and instantiates the cube geometry.
 Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceResources>& deviceResources) :
 	m_loadingComplete(false),
@@ -67,16 +69,41 @@ void Sample2DSceneRenderer::Render()
 
 	auto context = m_deviceResources->GetD2DDeviceContext();
 	context->BeginDraw();
-	context->Clear(D2D1::ColorF(D2D1::ColorF::IndianRed));
+	context->Clear(D2D1::ColorF(D2D1::ColorF::PapayaWhip));
+	m_strokeBrush->SetColor(D2D1::ColorF(D2D1::ColorF::OliveDrab, 1.f));
+	context->FillGeometry(m_pathLeftMountain.Get(), m_strokeBrush.Get());
 	context->EndDraw();
 }
 
 void Sample2DSceneRenderer::CreateDeviceDependentResources()
 {
-	DX::ThrowIfFailed(
-		m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::AliceBlue), &m_blueBrush)
-	);
+	TIF(m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Coral), &m_strokeBrush));
+	MakeScenery();
 	m_loadingComplete = true;
+}
+
+// heartily lifted from https://msdn.microsoft.com/en-us/library/windows/desktop/ee264309(v=vs.85).aspx
+void Sample2DSceneRenderer::MakeScenery()
+{
+	TIF(m_deviceResources->GetD2DFactory()->CreatePathGeometry(&m_pathLeftMountain));
+	ComPtr<ID2D1GeometrySink> pathCmds;
+	m_pathLeftMountain->Open(&pathCmds);
+
+	pathCmds->SetFillMode(D2D1_FILL_MODE_WINDING);
+	pathCmds->BeginFigure(
+		D2D1::Point2F(346, 255),
+		D2D1_FIGURE_BEGIN_FILLED        // also has HOLLOW a.k.a stroked
+	);
+	D2D1_POINT_2F points[5] = {
+		D2D1::Point2F(267, 177),
+		D2D1::Point2F(236, 192),
+		D2D1::Point2F(212, 160),
+		D2D1::Point2F(156, 255),
+		D2D1::Point2F(346, 255),
+	};
+	pathCmds->AddLines(points, ARRAYSIZE(points));
+	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);     // also has OPEN; leaves it open to append further figures to the geometry
+	TIF(pathCmds->Close());
 }
 
 void Sample2DSceneRenderer::ReleaseDeviceDependentResources()
