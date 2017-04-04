@@ -96,7 +96,7 @@ void SampleFpsTextRenderer::Render()
 	context->DrawTextLayout(
 		D2D1::Point2F(0.f, 0.f),
 		m_textLayout.Get(),
-		m_whiteBrush.Get()
+		m_solidBrush.Get()
 		);
 
 	// Ignore D2DERR_RECREATE_TARGET here. This error indicates that the device
@@ -113,10 +113,10 @@ void SampleFpsTextRenderer::Render()
 void SampleFpsTextRenderer::CreateDeviceDependentResources()
 {
 	DX::ThrowIfFailed(
-		m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_whiteBrush)
+		m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_solidBrush)
 		);
 }
 void SampleFpsTextRenderer::ReleaseDeviceDependentResources()
 {
-	m_whiteBrush.Reset();
+	m_solidBrush.Reset();
 }

@@ -173,7 +173,7 @@ void Sample2DSceneRenderer::MakeRightMountain()
 	};
 	pathCmds->AddLines(points, ARRAYSIZE(points));
 	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);     // also has OPEN; leaves it open to append further figures to the geometry
-	TIF(pathCmds->Close());
+	TIF(pathCmds->Close());                          // fill still works as though CLOSED; it's only strokes that're affected
 }
 
 void Hello2D::Sample2DSceneRenderer::MakeSun()

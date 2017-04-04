@@ -22,7 +22,6 @@
 *.opensdf
 *.ncb
 *.suo
-*.filters
 *.ilk
 *.cachefile
 *.db
@@ -40,3 +39,5 @@ UpgradeLog*.htm
 *.mdf
 *.ldf
 FakesAssemblies/
+
+\#*#
