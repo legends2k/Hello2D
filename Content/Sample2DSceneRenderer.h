@@ -27,10 +27,12 @@ namespace Hello2D
 		void MakeSun();
 		void MakeRiver();
 
+		void RenderScene(ID2D1DeviceContext2 *context);
+
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources>            m_deviceResources;
 
-		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_strokeBrush;
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_solidBrush;
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathLeftMountain;
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathRightMountain;
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathSun;
