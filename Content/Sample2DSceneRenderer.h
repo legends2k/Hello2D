@@ -30,17 +30,22 @@ namespace Hello2D
 		void RenderScene(ID2D1DeviceContext2 *context);
 
 		// Cached pointer to device resources.
-		std::shared_ptr<DX::DeviceResources>            m_deviceResources;
+		std::shared_ptr<DX::DeviceResources>             m_deviceResources;
+														 
+		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>     m_solidBrush;
+		Microsoft::WRL::ComPtr<ID2D1RadialGradientBrush> m_radialGradBrush;
+														 
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathLeftMountain;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathRightMountain;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathSun;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathRiver;
+														 
+		// Variables used with the rendering loop.		 
+		bool	                                         m_loadingComplete;
+		bool	                                         m_tracking;
 
-		Microsoft::WRL::ComPtr<ID2D1SolidColorBrush>    m_solidBrush;
-		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathLeftMountain;
-		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathRightMountain;
-		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathSun;
-		Microsoft::WRL::ComPtr<ID2D1PathGeometry>       m_pathRiver;
-
-		// Variables used with the rendering loop.
-		bool	                                        m_loadingComplete;
-		bool	                                        m_tracking;
+		constexpr static auto                            m_sunRadius = 85.0f;
+		constexpr static D2D1_POINT_2F                   m_sunCenter { 355.0f, 255.0f };
 	};
 }
 

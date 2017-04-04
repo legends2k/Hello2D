@@ -76,7 +76,7 @@ void Sample2DSceneRenderer::Render()
 
 void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)
 {
-	context->FillGeometry(m_pathSun.Get(), m_solidBrush.Get());
+	context->FillGeometry(m_pathSun.Get(), m_radialGradBrush.Get());
 
 	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
 	context->DrawGeometry(m_pathSun.Get(), m_solidBrush.Get(), 1.f);
@@ -102,7 +102,19 @@ void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)
 
 void Sample2DSceneRenderer::CreateDeviceDependentResources()
 {
-	TIF(m_deviceResources->GetD2DDeviceContext()->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Coral), &m_solidBrush));
+	auto dc = m_deviceResources->GetD2DDeviceContext();
+	TIF(dc->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Coral), &m_solidBrush));
+	// Create an array of gradient stops to put in the gradient stop
+	// collection that will be used in the gradient brush.
+	ComPtr<ID2D1GradientStopCollection> gradientStopsColl;
+	D2D1_GRADIENT_STOP gradientStops[2];
+	gradientStops[0].color = D2D1::ColorF(D2D1::ColorF::Yellow);
+	gradientStops[0].position = 0.0f;
+	gradientStops[1].color = D2D1::ColorF(D2D1::ColorF::OrangeRed);
+	gradientStops[1].position = 1.0f;
+	TIF(dc->CreateGradientStopCollection(gradientStops, ARRAYSIZE(gradientStops), &gradientStopsColl));
+	auto radialBrushprops = D2D1::RadialGradientBrushProperties(m_sunCenter, D2D1::Point2F(), m_sunRadius, m_sunRadius);
+	dc->CreateRadialGradientBrush(radialBrushprops, gradientStopsColl.Get(), &m_radialGradBrush);
 	MakeScenery();
 	m_loadingComplete = true;
 }
@@ -172,13 +184,13 @@ void Hello2D::Sample2DSceneRenderer::MakeSun()
 	pathCmds->SetFillMode(D2D1_FILL_MODE_WINDING);
 
 	pathCmds->BeginFigure(
-		D2D1::Point2F(270, 255),
+		D2D1::Point2F(m_sunCenter.x - m_sunRadius, m_sunCenter.y),
 		D2D1_FIGURE_BEGIN_FILLED
 	);
 	pathCmds->AddArc(
 		D2D1::ArcSegment(
 			D2D1::Point2F(440, 255), // end point
-			D2D1::SizeF(85, 85),
+			D2D1::SizeF(m_sunRadius, m_sunRadius),
 			0.0f, // rotation angle
 			D2D1_SWEEP_DIRECTION_CLOCKWISE,
 			D2D1_ARC_SIZE_SMALL
