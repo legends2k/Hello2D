@@ -82,6 +82,7 @@ void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)
 void Sample2DSceneRenderer::CreateDeviceDependentResources()
 {
 	auto dc = m_deviceResources->GetD2DDeviceContext();
+	// https://msdn.microsoft.com/en-us/library/windows/desktop/dd756651(v=vs.85).aspx
 	// Create an array of gradient stops to put in the gradient stop
 	// collection that will be used in the gradient brush.
 	ComPtr<ID2D1GradientStopCollection> gradientStopsColl;
@@ -116,7 +117,7 @@ void Hello2D::Sample2DSceneRenderer::MakeSun()
 	);
 	pathCmds->AddArc(
 		D2D1::ArcSegment(
-			D2D1::Point2F(440, 255), // end point
+			D2D1::Point2F(m_sunCenter.x + m_sunRadius, m_sunCenter.y), // end point
 			D2D1::SizeF(m_sunRadius, m_sunRadius),
 			0.0f, // rotation angle
 			D2D1_SWEEP_DIRECTION_CLOCKWISE,
