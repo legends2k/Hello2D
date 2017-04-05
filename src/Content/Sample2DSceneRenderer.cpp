@@ -59,6 +59,11 @@ void Sample2DSceneRenderer::StopTracking()
 	m_tracking = false;
 }
 
+void Hello2D::Sample2DSceneRenderer::Zoom(bool zoomIn)
+{
+	m_scaleFactor += (zoomIn ? 1.0f : -1.0f) * m_scaleDelta;
+}
+
 // Renders one frame using the vertex and pixel shaders.
 void Sample2DSceneRenderer::Render()
 {
@@ -71,7 +76,9 @@ void Sample2DSceneRenderer::Render()
 	auto context = m_deviceResources->GetD2DDeviceContext();
 	context->BeginDraw();
 	context->Clear(D2D1::ColorF(D2D1::ColorF::PapayaWhip));
+	context->SetTransform(D2D1::Matrix3x2F::Scale(m_scaleFactor, m_scaleFactor));
 	RenderScene(context);
+	context->SetTransform(D2D1::Matrix3x2F::Identity());
 	context->EndDraw();
 }
 

@@ -72,6 +72,11 @@ void Hello2DMain::StopRenderLoop()
 	m_renderLoopWorker->Cancel();
 }
 
+void Hello2D::Hello2DMain::Zoom(bool zoomIn)
+{
+	m_sceneRenderer->Zoom(zoomIn);
+}
+
 // Updates the application state once per frame.
 void Hello2DMain::Update() 
 {

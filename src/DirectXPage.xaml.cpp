@@ -153,13 +153,6 @@ void DirectXPage::OnDisplayContentsInvalidated(DisplayInformation^ sender, Objec
 	m_deviceResources->ValidateDevice();
 }
 
-// Called when the app bar button is clicked.
-void DirectXPage::AppBarButton_Click(Object^ sender, RoutedEventArgs^ e)
-{
-	// Use the app bar if it is appropriate for your app. Design the app bar, 
-	// then fill in event handlers (like this one).
-}
-
 void DirectXPage::OnPointerPressed(Object^ sender, PointerEventArgs^ e)
 {
 	// When the pointer is pressed begin tracking the pointer movement.
@@ -201,5 +194,16 @@ void Hello2D::DirectXPage::Page_KeyUp(Platform::Object^ sender, Windows::UI::Xam
 	if (e->Key == Windows::System::VirtualKey::Escape)
 	{
 		Application::Current->Exit();
+		e->Handled = true;
+	}
+	else if (e->Key == Windows::System::VirtualKey::Space)
+	{
+		m_main->Zoom(true);
+		e->Handled = true;
+	}
+	else if (e->Key == Windows::System::VirtualKey::Back)
+	{
+		m_main->Zoom(false);
+		e->Handled = true;
 	}
 }

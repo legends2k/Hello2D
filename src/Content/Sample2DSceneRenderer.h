@@ -19,6 +19,7 @@ namespace Hello2D
 		void TrackingUpdate(float positionX);
 		void StopTracking();
 		bool IsTracking() { return m_tracking; }
+		void Zoom(bool zoomIn);
 
 	private:
 		void MakeScenery();
@@ -44,13 +45,16 @@ namespace Hello2D
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathPhotoFrame;
 		
 		Microsoft::WRL::ComPtr<ID2D1Layer>               m_clipLayer;
-														 
+
+		float                                            m_scaleFactor = 1.0f;
+
 		// Variables used with the rendering loop.		 
 		bool	                                         m_loadingComplete;
 		bool	                                         m_tracking;
 
 		constexpr static auto                            m_sunRadius = 85.0f;
 		constexpr static D2D1_POINT_2F                   m_sunCenter { 355.0f, 255.0f };
+		constexpr static auto                            m_scaleDelta = 0.1f;
 	};
 }
 
