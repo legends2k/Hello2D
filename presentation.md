@@ -92,7 +92,7 @@ The brush used by the artist has
 
 # Dissection 2
 
-**Git train**: _Fill_ station, coming up!
+**Git train**: next stop, _Fill_ station!
 
 > `git checkout tags/Fill`
 
@@ -113,12 +113,12 @@ The brush used by the artist has
 # Even = fill, Odd = no fill
 ![Even Odd rule](./img/even_odd.png "Even Odd"){ width=100% height=100% }
 
-> Credit: MSDN
+> **Credit**: MSDN
 
 # Non-zero Fill
 ![Non-zero rule](./img/nonzero.png "Non-zero"){ width=50% height=50% }
 
-> Credit: MSDN
+> **Credit**: MSDN
 
 # Resource: Brushes
 
@@ -137,6 +137,11 @@ Didn’t speak about its colour thus far; it can be
     + Bitmap
         * Get colour from a lookup table
 
+# Brush Types
+![Brush Types](./img/IC534021.png "Brushes"){ width=50% height=50% }
+
+> **Credit**: MSDN
+
 # Concept: Colours
 
 * Need a precise way of representing colours
@@ -149,9 +154,11 @@ Didn’t speak about its colour thus far; it can be
     + Additive colour system
     + This is how display systems work
     + Easy math: simple calculations
+    + Unintuitive interpolation
 * HSV is preferred by artists
     + Most aesthetically pleasing
     + Better for colour pickers
+    + Intuitive interpolation
 
 # Pixel formats
 
@@ -181,31 +188,85 @@ Didn’t speak about its colour thus far; it can be
 
 # Concept: Interpolation
 
-**Idea**: Given two values, guess/find values in between
-
-> 0 ● ——————×—————— ○ 1
+$$
+\put(-80,0){\color[rgb]{0,0,0}\circle*{7}}
+\put(-82,-18) 0
+\put(-60,0){\color[rgb]{0.125,0.125,0.125}\circle*{7}}
+\put(-40,0){\color[rgb]{0.25,0.25,0.25}\circle*{7}}
+\put(-20,0){\color[rgb]{0.375,0.375,0.375}\circle*{7}}
+\put(0,0){\color[rgb]{0.5,0.5,0.5}\circle*{7}}
+\put(-3,-18){$\frac{1}{2}$}
+\put(20,0){\color[rgb]{0.625,0.625,0.625}\circle*{7}}
+\put(40,0){\color[rgb]{0.75,0.75,0.75}\circle*{7}}
+\put(60,0){\color[rgb]{0.875,0.875,0.875}\circle*{7}}
+\put(80,0){\circle{7.6}}\put(80,0){\color[rgb]{1,1,1}\circle*{7}}
+\put(78,-18) 1
+$$
 
 * Colour at `0` is black `(0, 0, 0)`
 * Colour at `1` is white `(1, 1, 1)`
 * What's the colour at `½`?
 * It's pure grey: `(½, ½, ½)`.  But how?
-* Works with any values: position (any dimension), temperature, say even chilli hotness – scoville heat index, etc.
+
+> **Interpolation**: Given two values, guess/find values in between
+
+Works with any values: position (any dimension), temperature, say even chilli hotness (scoville heat index), etc.
+
+$$
+\put(-80,0){\color[rgb]{1,0,0}\circle*{7}}
+\put(-95,-25){(1, 0, 0)}
+\put(-60,0){\color[rgb]{0.875,0.125,0}\circle*{7}}
+\put(-40,0){\color[rgb]{0.75,0.25,0}\circle*{7}}
+\put(-20,0){\color[rgb]{0.625,0.375,0}\circle*{7}}
+\put(0,0){\color[rgb]{0.5,0.5,0}\circle*{7}}
+\put(-18,-25){$(\frac{1}{2}, \frac{1}{2}, 0)$}
+\put(20,0){\color[rgb]{0.375,0.625,0}\circle*{7}}
+\put(40,0){\color[rgb]{0.25,0.75,0}\circle*{7}}
+\put(60,0){\color[rgb]{0.125,0.875,0}\circle*{7}}
+\put(80,0){\color[rgb]{0,1,0}\circle*{7}}
+\put(65,-25){(0, 1, 0)}
+$$
 
 # Linear Interpolation a.k.a lerp
 
 $$
-\boxed{L(t) = P_0 + t (P_1 - P_0)}
+\boxed{V(t) = (1 - t) V_0 + t V_1}
 $$
 
-\begin{align*}
-P_0 = (0, 0, 0) && P_1 = (1, 1, 1) \\
-L(0) = (0, 0, 0) && L(1) = (1, 1, 1) && L(\frac{1}{2}) = (\frac{1}{2}, \frac{1}{2}, \frac{1}{2})
-\end{align*}
+```
+t          0         1
+  |--------P--x------Q------------->
+X 0        9  ?      19
+```
 
+Given $P$ and $Q$, find the value at $t = 0.3$
 
-# Radial Interpolation
+$$
+V(0.3) = 0.7 P + 0.3 Q = 0.7 (9) + 0.3 (19) = 12
+$$
+
+![Credit: CMG Lee, Wikipedia](./img/lerp.png "Lerp"){ width=50% height=30% }
+
+# Linear Gradient Brushes
+
+Interpolates colours (stops) along an axis (line)
+
+![Linear gradient](./img/IC534025.png "Linear gradient"){ width=50% height=50% }
+![Diagonal Axis](./img/IC534012.png "Linear gradient axis"){ width=50% height=50% }
+
+> **Credit**: MSDN
+
+# Radial Gradient Brushes
+
+Think of it as linear interpolation between concentric circles
+
+![Linear gradient](./img/IC534015.png "Linear gradient"){ width=75% height=75% }
+
+> **Credit**: MSDN
 
 # Bitmap Brushes
+
+Index from an image / texture / bitmap --- look-up table --- with position
 
 # Tiling and Pattern Brushes
 
@@ -221,8 +282,19 @@ L(0) = (0, 0, 0) && L(1) = (1, 1, 1) && L(\frac{1}{2}) = (\frac{1}{2}, \frac{1}{
 * Matrices are used extensively in all graphics APIs
     + Can concatenate multiple transforms into one complex transform
 * Internalize them by playing with simple "Hello, World" program
-* [2D Transforms 101](http://legends2k.github.io/2d-transforms-101/): an auxiliary presentation with interactive animations
+* [2D Transforms 101](http://legends2k.github.io/2d-transforms-101/): a supplementary presentation with interactive animations
 
 # Clipping
+
+* Drawing --- stroking & filling --- by default is conceptually boundless
+* In reality, you're bound by the paper / canvas
+* On a computer, you're bound by the surface dimension
+
+> **Clip**: additional bounds to drawing operations
+
+* Can be *any* geometry (think *shape*), not necessarily rectangles
+* Rectangles are usually faster though
+* *Inside*ness is decided by the same rules as *fill*
+* Clips are combined by intersection
 
 # Text
