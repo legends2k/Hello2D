@@ -185,6 +185,18 @@ L(0) = (0, 0, 0) && L(1) = (1, 1, 1) && L(\frac{1}{2}) = (\frac{1}{2}, \frac{1}{
 
 # Transformations
 
+* Concise representation of changes to points
+* Usual operations
+    + Scale
+    + Rotate
+    + Translate
+    + Shear
+    + Flip/Mirror
+* Matrices are used extensively in all graphics APIs
+    + Can concatenate multiple transforms into one complex transform
+* Internalize them by playing with simple "Hello, World" program
+* [2D Transforms 101](http://legends2k.github.io/2d-transforms-101/): an auxiliary presentation with interactive animations
+
 # Clipping
 
 # Text
