@@ -11,7 +11,7 @@
 
 > **Disclaimer**: This is a primer.  Chances are you might know a lot more than the presenter and the presented!
 
-# Reasons
+# Approach
 
 * Prefer breadth-wise coverage
     + Allows to cover more concepts
@@ -26,7 +26,6 @@
 # Let's Draw This
 
 ![Paths, strokes and fills](./img/output1.png "Scenery"){ width=100% height=100% }
-
 
 # Dissection 1
 
@@ -107,7 +106,7 @@ The brush used by the artist has
     + One sub-path inside another?
     + Self-intersecting paths?
 * [Winding rule](https://msdn.microsoft.com/en-us/library/windows/desktop/dd368110(v=vs.85).aspx)
-    + Even-odd
+    + Even-odd (cheaper)
     + Non-zero
 
 # Even = fill, Odd = no fill
@@ -159,6 +158,15 @@ Didn’t speak about its colour thus far; it can be
     + Most aesthetically pleasing
     + Better for colour pickers
     + Intuitive interpolation
+
+# Play Time
+
+> `git clone https://bitbucket.org/rmsundaram/tryouts.git`
+
+Play with
+
+* `CG\WebGL\CrystalBall\crystal_ball.html`
+* `CG\Misc\hsv_wheel.html`
 
 # Pixel formats
 
@@ -264,12 +272,6 @@ Think of it as linear interpolation between concentric circles
 
 > **Credit**: MSDN
 
-# Bitmap Brushes
-
-Index from an image / texture / bitmap --- look-up table --- with position
-
-# Tiling and Pattern Brushes
-
 # Transformations
 
 * Concise representation of changes to points
@@ -284,6 +286,14 @@ Index from an image / texture / bitmap --- look-up table --- with position
 * Internalize them by playing with simple "Hello, World" program
 * [2D Transforms 101](http://legends2k.github.io/2d-transforms-101/): a supplementary presentation with interactive animations
 
+# Dissection 4
+
+**Git train**: final stop, _Clip_ station!
+
+> `git checkout tags/Clip`
+
+![Path-based Clip](./img/output1.png "Fills"){ width=50% height=50% }
+
 # Clipping
 
 * Drawing --- stroking & filling --- by default is conceptually boundless
@@ -296,5 +306,3 @@ Index from an image / texture / bitmap --- look-up table --- with position
 * Rectangles are usually faster though
 * *Inside*ness is decided by the same rules as *fill*
 * Clips are combined by intersection
-
-# Text
