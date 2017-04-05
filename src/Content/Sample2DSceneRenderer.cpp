@@ -16,6 +16,7 @@ Sample2DSceneRenderer::Sample2DSceneRenderer(const std::shared_ptr<DX::DeviceRes
 	m_tracking(false),
 	m_deviceResources(deviceResources)
 {
+	MakeScenery();
 	CreateDeviceDependentResources();
 	CreateWindowSizeDependentResources();
 }
@@ -78,26 +79,37 @@ void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)
 {
 	context->FillGeometry(m_pathSun.Get(), m_radialGradBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
-	context->DrawGeometry(m_pathSun.Get(), m_solidBrush.Get(), 1.f);
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	context->DrawGeometry(m_pathSun.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::OliveDrab, 1.f));
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::OliveDrab));
 	context->FillGeometry(m_pathLeftMountain.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
-	context->DrawGeometry(m_pathLeftMountain.Get(), m_solidBrush.Get(), 1.f);
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	context->DrawGeometry(m_pathLeftMountain.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::LightSkyBlue, 1.f));
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::LightSkyBlue));
 	context->FillGeometry(m_pathRiver.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
-	context->DrawGeometry(m_pathRiver.Get(), m_solidBrush.Get(), 1.f);
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	context->DrawGeometry(m_pathRiver.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::YellowGreen, 1.f));
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::YellowGreen));
 	context->FillGeometry(m_pathRightMountain.Get(), m_solidBrush.Get());
 
-	m_solidBrush.Get()->SetColor(D2D1::ColorF(D2D1::ColorF::Black, 1.f));
-	context->DrawGeometry(m_pathRightMountain.Get(), m_solidBrush.Get(), 1.f);
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+	context->DrawGeometry(m_pathRightMountain.Get(), m_solidBrush.Get());
+
+	DrawPhotoFrame(context);
+}
+
+void Hello2D::Sample2DSceneRenderer::DrawPhotoFrame(ID2D1DeviceContext2 *context)
+{
+	auto size = m_deviceResources->GetOutputSize();
+	context->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), m_pathPhotoFrame.Get()), m_clipLayer.Get());
+	m_solidBrush->SetColor(D2D1::ColorF(D2D1::ColorF::SaddleBrown));
+	context->FillRectangle(D2D1::RectF(0.0f, 0.0f, size.Width, size.Height), m_solidBrush.Get());
+	context->PopLayer();
 }
 
 void Sample2DSceneRenderer::CreateDeviceDependentResources()
@@ -115,7 +127,7 @@ void Sample2DSceneRenderer::CreateDeviceDependentResources()
 	TIF(dc->CreateGradientStopCollection(gradientStops, ARRAYSIZE(gradientStops), &gradientStopsColl));
 	auto radialBrushprops = D2D1::RadialGradientBrushProperties(m_sunCenter, D2D1::Point2F(), m_sunRadius, m_sunRadius);
 	dc->CreateRadialGradientBrush(radialBrushprops, gradientStopsColl.Get(), &m_radialGradBrush);
-	MakeScenery();
+	dc->CreateLayer(&m_clipLayer);
 	m_loadingComplete = true;
 }
 
@@ -126,6 +138,7 @@ void Sample2DSceneRenderer::MakeScenery()
 	MakeRightMountain();
 	MakeSun();
 	MakeRiver();
+	MakePhotoFrame();
 }
 
 void Sample2DSceneRenderer::MakeLeftMountain()
@@ -325,6 +338,28 @@ void Hello2D::Sample2DSceneRenderer::MakeRiver()
 			D2D1::Point2F(296, 392)
 		));
 	pathCmds->EndFigure(D2D1_FIGURE_END_OPEN);
+	TIF(pathCmds->Close());
+}
+
+void Hello2D::Sample2DSceneRenderer::MakePhotoFrame()
+{
+	TIF(m_deviceResources->GetD2DFactory()->CreatePathGeometry(&m_pathPhotoFrame));
+	ComPtr<ID2D1GeometrySink> pathCmds;
+	TIF(m_pathPhotoFrame->Open(&pathCmds));
+	pathCmds->SetFillMode(D2D1_FILL_MODE_ALTERNATE);
+
+	// Inner rect: 140, 120 -> 600, 416
+	pathCmds->BeginFigure(D2D1::Point2F(140.0f, 120.0f), D2D1_FIGURE_BEGIN_FILLED);
+	D2D1_POINT_2F corners1[] = { { 140.0f, 416.0f }, { 600.0f, 416.0f }, { 600.0f, 120.0f } };
+	pathCmds->AddLines(corners1, ARRAYSIZE(corners1));
+	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);
+
+	// Outer rect: 120, 100 -> 620, 436
+	pathCmds->BeginFigure(D2D1::Point2F(120.0f, 100.0f), D2D1_FIGURE_BEGIN_FILLED);
+	D2D1_POINT_2F corners2[] = { { 120.0f, 436.0f },{ 620.0f, 436.0f },{ 620.0f, 100.0f } };
+	pathCmds->AddLines(corners2, ARRAYSIZE(corners2));
+	pathCmds->EndFigure(D2D1_FIGURE_END_CLOSED);
+
 	TIF(pathCmds->Close());
 }
 

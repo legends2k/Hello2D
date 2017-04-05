@@ -26,8 +26,10 @@ namespace Hello2D
 		void MakeRightMountain();
 		void MakeSun();
 		void MakeRiver();
+		void MakePhotoFrame();
 
 		void RenderScene(ID2D1DeviceContext2 *context);
+		void DrawPhotoFrame(ID2D1DeviceContext2 *context);
 
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources>             m_deviceResources;
@@ -39,6 +41,9 @@ namespace Hello2D
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathRightMountain;
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathSun;
 		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathRiver;
+		Microsoft::WRL::ComPtr<ID2D1PathGeometry>        m_pathPhotoFrame;
+		
+		Microsoft::WRL::ComPtr<ID2D1Layer>               m_clipLayer;
 														 
 		// Variables used with the rendering loop.		 
 		bool	                                         m_loadingComplete;
