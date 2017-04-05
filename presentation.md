@@ -23,10 +23,18 @@
 * Concepts are API-agnostic
     + D2D used here but works just as well in say HTML5 canvas, SDL, etc.
 
-# Let's Draw!
+# Let's Draw This
 
 ![Paths, strokes and fills](./img/output1.png "Scenery"){ width=100% height=100% }
 
+
+# Dissection 1
+
+**Git train**: _Stroke_ station, coming up!
+
+> `git checkout tags/Stroke`
+
+![Paths and strokes](./img/output2.png "Strokes"){ width=50% height=50% }
 
 # Concept: Path / Geometry
 
@@ -82,6 +90,14 @@ The brush used by the artist has
     * Miter join `V`
 + Miter limit: max height when joining two line ends
 
+# Dissection 2
+
+**Git train**: _Fill_ station, coming up!
+
+> `git checkout tags/Fill`
+
+![Fills](./img/output3.png "Fills"){ width=50% height=50% }
+
 # Drawing paths: fill
 
 * Filling the interior of a path with some brush
@@ -106,7 +122,9 @@ The brush used by the artist has
 
 # Resource: Brushes
 
-Brushes, also called, **pens** do stroking & filling
+Figures are fine but what about the colours used to draw?
+
+> **Brushes**, also called, **pens** do stroking & filling.
 
 Didn’t speak about its colour thus far; it can be
 
@@ -152,6 +170,14 @@ Didn’t speak about its colour thus far; it can be
     + Costly: `4 * 32 = 128` bits for RGBA
     + Better for image manipulation
 * If exceeds during calculation, it's `clamp` ed by `min` and `max`
+
+# Dissection 3
+
+**Git train**: _Gradient_ station, coming up!
+
+> `git checkout tags/Gradient`
+
+![Gradient colours](./img/output4.png "Gradience"){ width=50% height=50% }
 
 # Concept: Interpolation
 

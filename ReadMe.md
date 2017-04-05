@@ -1,8 +1,8 @@
 # 2D Graphics Primer
 
-A presentation on 2D rendering concepts and a sample app. to go with it.  The concepts explained are API-agnostic; [Direct2D](https://msdn.microsoft.com/en-us/library/windows/desktop/dd372337(v=vs.85).aspx) is used here for demonstration.  The project is tested to work on Visual Studio 2015 and 2017 on Windows 10.
+A presentation on 2D rendering concepts and a sample app. to go with it.  The concepts explained are API-agnostic; [Direct2D](https://msdn.microsoft.com/en-us/library/windows/desktop/dd372337(v=vs.85).aspx) is used here for demonstration.  The project is tested to work on Windows 10 with Visual Studio 2015 and 2017.
 
-[`presentation.md`](https://github.com/legends2k/Hello2D/blob/master/presentation.md) has the presentation content in Markdown format.  You would need
+[`presentation.md`](https://github.com/legends2k/Hello2D/blob/master/presentation.md) has the content in Markdown format.  You would need
 
 * XeLaTeX
 * PdfTeX
