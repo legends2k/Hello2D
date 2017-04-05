@@ -272,6 +272,34 @@ Think of it as linear interpolation between concentric circles
 
 > **Credit**: MSDN
 
+# Bitmap Brushes
+
+* Works by indexing the lookup table --- image, buffer, texture, surface
+* Extend modes a.k.a **how to tile?**
+    + Clamp
+    + Wrap
+    + Mirror
+* Interpolation modes a.k.a **how to scale?**
+    + Linear
+    + Nearest-neighbour
+
+# Brush Properties
+
+![Brush parameters](./img/IC534027.png "Brush properties"){ width=50% height=50% }
+
+# Shading Patterns
+
+* *Linear* and *radial* are really subclasses of a general class
+
+> Computing an image on-the-fly with math equations and parameters
+
+* Make a bitmap brush out of it
+* Understading how the pattern is computed is fairly involved
+
+> `git clone https://bitbucket.org/rmsundaram/tryouts.git`
+
+Play with `CG\WebGL\coons_patch.html`
+
 # Transformations
 
 * Concise representation of changes to points
