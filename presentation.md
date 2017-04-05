@@ -1,6 +1,6 @@
 % 2D Graphics Primer
 % Sundaram Ramaswamy
-% April, 2017
+% https://github.com/legends2k/Hello2D
 
 # Good 'ol drawing
 
@@ -11,13 +11,17 @@
 
 > **Disclaimer**: This is a primer.  Chances are you might know a lot more than the presenter and the presented!
 
+It'd be good to follow along
+
+> `git clone https://github.com/legends2k/Hello2D.git`
+
 # Approach
 
 * Prefer breadth-wise coverage
     + Allows to cover more concepts
     + Pretty pictures are better motivators :)
     + Learning concepts in isolation doesn't encourage you to jump-in
-    + Beginners wouldn't appricate digging deep; can always do it alone once motivated
+    + Beginners wouldn't appreciate digging deep; can always do it alone once motivated
 * Favour intuition over rigour
     + Tries to be an "enabler" not a _Reference Guide_
 * Concepts are API-agnostic
@@ -65,7 +69,7 @@
     + It’s cumbersome to construct figures otherwise
     + [XAML](https://msdn.microsoft.com/en-us/library/ms752293.aspx): `M 10, 100 L 20, 100`
     + PDF: `10 100 m 20 100 l`
-* Represent any artibrary shape: polygon
+* Represent any arbitrary shape: polygon
 * Multiple disjoint figures within a single path geometry
 
 # Drawing paths: stroke
@@ -85,7 +89,7 @@ The brush used by the artist has
     * Square cap `| --- |`
 + Line join style
     * Round join `u`
-    * Round join `\_/`
+    * Bevel join `\_/`
     * Miter join `V`
 + Miter limit: max height when joining two line ends
 
@@ -109,7 +113,7 @@ The brush used by the artist has
     + Even-odd (cheaper)
     + Non-zero
 
-# Even = fill, Odd = no fill
+# Even = no fill, Odd = fill
 ![Even Odd rule](./img/even_odd.png "Even Odd"){ width=100% height=100% }
 
 > **Credit**: MSDN
@@ -153,7 +157,7 @@ Didn’t speak about its colour thus far; it can be
     + Additive colour system
     + This is how display systems work
     + Easy math: simple calculations
-    + Unintuitive interpolation
+    + Un-intuitive interpolation
 * HSV is preferred by artists
     + Most aesthetically pleasing
     + Better for colour pickers
@@ -192,7 +196,7 @@ Play with
 
 > `git checkout tags/Gradient`
 
-![Gradient colours](./img/output4.png "Gradience"){ width=50% height=50% }
+![Gradient colours](./img/output4.png "Gradient colours"){ width=50% height=50% }
 
 # Concept: Interpolation
 
@@ -294,7 +298,7 @@ Think of it as linear interpolation between concentric circles
 > Computing an image on-the-fly with math equations and parameters
 
 * Make a bitmap brush out of it
-* Understading how the pattern is computed is fairly involved
+* Understanding how the pattern is computed is fairly involved
 
 > `git clone https://bitbucket.org/rmsundaram/tryouts.git`
 
@@ -330,7 +334,18 @@ Play with `CG\WebGL\coons_patch.html`
 
 > **Clip**: additional bounds to drawing operations
 
+* Any stroke / fill going not within will be clipped
 * Can be *any* geometry (think *shape*), not necessarily rectangles
 * Rectangles are usually faster though
 * *Inside*ness is decided by the same rules as *fill*
 * Clips are combined by intersection
+
+# Text Rendering
+
+* A vast topic that warrants its own presentation
+* Fonts / text is ubiquitous; fast
+* Modern forms are **vector** a.k.a **outline** fonts
+* Series of lines and Bézier curves forming the glyphs
+* Raster fonts are fast to render but get pixellated quickly
+* There's _no one true way_™. Different APIs, different methods
+* At its essence, it is a series of path rendering at different scales
