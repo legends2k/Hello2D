@@ -20,6 +20,7 @@ namespace Hello2D
 		void StopTracking();
 		bool IsTracking() { return m_tracking; }
 		void Zoom(bool zoomIn);
+		void ToggleRenderingMode();
 
 	private:
 		void MakeScenery();
@@ -31,6 +32,7 @@ namespace Hello2D
 
 		void RenderScene(ID2D1DeviceContext2 *context);
 		void DrawPhotoFrame(ID2D1DeviceContext2 *context);
+		void CacheRendering();
 
 		// Cached pointer to device resources.
 		std::shared_ptr<DX::DeviceResources>             m_deviceResources;
@@ -46,11 +48,19 @@ namespace Hello2D
 		
 		Microsoft::WRL::ComPtr<ID2D1Layer>               m_clipLayer;
 
+		Microsoft::WRL::ComPtr<ID2D1Bitmap>              m_sceneBitmap;
+
+		enum class RenderingMode
+		{
+			Vector,
+			Raster
+		}                                                m_renderingMode = RenderingMode::Vector;
 		float                                            m_scaleFactor = 1.0f;
 
 		// Variables used with the rendering loop.		 
 		bool	                                         m_loadingComplete;
 		bool	                                         m_tracking;
+		bool                                             m_rasterized = false;
 
 		constexpr static auto                            m_sunRadius = 85.0f;
 		constexpr static D2D1_POINT_2F                   m_sunCenter { 355.0f, 255.0f };

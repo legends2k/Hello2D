@@ -191,19 +191,22 @@ void DirectXPage::OnSwapChainPanelSizeChanged(Object^ sender, SizeChangedEventAr
 
 void Hello2D::DirectXPage::Page_KeyUp(Platform::Object^ sender, Windows::UI::Xaml::Input::KeyRoutedEventArgs^ e)
 {
-	if (e->Key == Windows::System::VirtualKey::Escape)
+	e->Handled = true;
+	switch (e->Key)
 	{
+	case Windows::System::VirtualKey::Escape:
 		Application::Current->Exit();
-		e->Handled = true;
-	}
-	else if (e->Key == Windows::System::VirtualKey::Space)
-	{
+		break;
+	case Windows::System::VirtualKey::Space:
 		m_main->Zoom(true);
-		e->Handled = true;
-	}
-	else if (e->Key == Windows::System::VirtualKey::Back)
-	{
+		break;
+	case Windows::System::VirtualKey::Back:
 		m_main->Zoom(false);
-		e->Handled = true;
+		break;
+	case Windows::System::VirtualKey::R:
+		m_main->ToggleRenderingMode();
+		break;
+	default:
+		e->Handled = false;
 	}
 }

@@ -77,6 +77,11 @@ void Hello2D::Hello2DMain::Zoom(bool zoomIn)
 	m_sceneRenderer->Zoom(zoomIn);
 }
 
+void Hello2D::Hello2DMain::ToggleRenderingMode()
+{
+	m_sceneRenderer->ToggleRenderingMode();
+}
+
 // Updates the application state once per frame.
 void Hello2DMain::Update() 
 {

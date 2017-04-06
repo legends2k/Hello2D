@@ -27,6 +27,15 @@ void Sample2DSceneRenderer::CreateWindowSizeDependentResources()
 	Size outputSize = m_deviceResources->GetOutputSize();
 	float aspectRatio = outputSize.Width / outputSize.Height;
 
+	auto dc = m_deviceResources->GetD2DDeviceContext();
+	float dpiX, dpiY;
+	dc->GetDpi(&dpiX, &dpiY);
+	auto size = dc->GetSize();
+	auto pxSize = dc->GetPixelSize();
+	TIF(dc->CreateBitmap(D2D1::SizeU(static_cast<UINT32>(pxSize.width), static_cast<UINT32>(pxSize.height)),
+		D2D1::BitmapProperties(dc->GetPixelFormat(), dpiX, dpiY),
+		&m_sceneBitmap));
+
 	// This is a simple example of change that can be made when the app is in
 	// portrait or snapped view.
 	if (aspectRatio < 1.0f)
@@ -64,6 +73,14 @@ void Hello2D::Sample2DSceneRenderer::Zoom(bool zoomIn)
 	m_scaleFactor += (zoomIn ? 1.0f : -1.0f) * m_scaleDelta;
 }
 
+void Hello2D::Sample2DSceneRenderer::ToggleRenderingMode()
+{
+	if (m_renderingMode == RenderingMode::Vector)
+		m_renderingMode = RenderingMode::Raster;
+	else
+		m_renderingMode = RenderingMode::Vector;
+}
+
 // Renders one frame using the vertex and pixel shaders.
 void Sample2DSceneRenderer::Render()
 {
@@ -73,13 +90,45 @@ void Sample2DSceneRenderer::Render()
 		return;
 	}
 
+	if ((m_renderingMode == RenderingMode::Raster) && !m_rasterized)
+	{
+		CacheRendering();
+	}
+
 	auto context = m_deviceResources->GetD2DDeviceContext();
 	context->BeginDraw();
 	context->Clear(D2D1::ColorF(D2D1::ColorF::PapayaWhip));
 	context->SetTransform(D2D1::Matrix3x2F::Scale(m_scaleFactor, m_scaleFactor));
-	RenderScene(context);
+
+	if (m_renderingMode == RenderingMode::Vector)
+		RenderScene(context);
+	else
+	{
+		auto dstSize = context->GetSize();
+		D2D1_RECT_F dstRect{0.0f, 0.0f, static_cast<float>(dstSize.width), static_cast<float>(dstSize.height)};
+		context->DrawBitmap(m_sceneBitmap.Get(), dstRect);
+	}
+
 	context->SetTransform(D2D1::Matrix3x2F::Identity());
-	context->EndDraw();
+	TIF(context->EndDraw());
+}
+
+void Sample2DSceneRenderer::CacheRendering()
+{
+	// draw at identity scale
+	auto context = m_deviceResources->GetD2DDeviceContext();
+	context->BeginDraw();
+	context->Clear(D2D1::ColorF(D2D1::ColorF::PapayaWhip));
+	RenderScene(context);
+	TIF(context->EndDraw());
+
+	// copy bitmap
+	auto srcBitmap = m_deviceResources->GetD2DTargetBitmap();
+	auto size = srcBitmap->GetPixelSize();
+	D2D_POINT_2U dstPt{};
+	D2D_RECT_U srcRect{ 0, 0, size.width, size.height };
+	TIF(m_sceneBitmap->CopyFromBitmap(&dstPt, srcBitmap, &srcRect));
+	m_rasterized = true;
 }
 
 void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)
