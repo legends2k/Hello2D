@@ -82,6 +82,11 @@ void Hello2D::Hello2DMain::ToggleRenderingMode()
 	m_sceneRenderer->ToggleRenderingMode();
 }
 
+void Hello2D::Hello2DMain::ToggleFeathering()
+{
+	m_sceneRenderer->ToggleFeathering();
+}
+
 // Updates the application state once per frame.
 void Hello2DMain::Update() 
 {

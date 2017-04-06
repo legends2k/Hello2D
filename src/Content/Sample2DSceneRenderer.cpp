@@ -35,6 +35,9 @@ void Sample2DSceneRenderer::CreateWindowSizeDependentResources()
 	TIF(dc->CreateBitmap(D2D1::SizeU(static_cast<UINT32>(pxSize.width), static_cast<UINT32>(pxSize.height)),
 		D2D1::BitmapProperties(dc->GetPixelFormat(), dpiX, dpiY),
 		&m_sceneBitmap));
+	TIF(dc->CreateBitmap(D2D1::SizeU(static_cast<UINT32>(pxSize.width), static_cast<UINT32>(pxSize.height)),
+		D2D1::BitmapProperties(dc->GetPixelFormat(), dpiX, dpiY),
+		&m_maskBitmap));
 
 	// This is a simple example of change that can be made when the app is in
 	// portrait or snapped view.
@@ -81,6 +84,11 @@ void Hello2D::Sample2DSceneRenderer::ToggleRenderingMode()
 		m_renderingMode = RenderingMode::Vector;
 }
 
+void Sample2DSceneRenderer::ToggleFeathering()
+{
+	m_feathering = static_cast<FeatheringMode>((static_cast<uint8_t>(m_feathering) + 1) % 3);
+}
+
 // Renders one frame using the vertex and pixel shaders.
 void Sample2DSceneRenderer::Render()
 {
@@ -106,7 +114,20 @@ void Sample2DSceneRenderer::Render()
 	{
 		auto dstSize = context->GetSize();
 		D2D1_RECT_F dstRect{0.0f, 0.0f, static_cast<float>(dstSize.width), static_cast<float>(dstSize.height)};
-		context->DrawBitmap(m_sceneBitmap.Get(), dstRect);
+		if (m_feathering == FeatheringMode::Off)
+			context->DrawBitmap(m_sceneBitmap.Get(), dstRect);
+		else
+		{
+			if (m_feathering == FeatheringMode::On)
+			{
+				auto currentAliasMode = context->GetAntialiasMode();
+				context->SetAntialiasMode(D2D1_ANTIALIAS_MODE_ALIASED);
+				context->FillOpacityMask(m_maskBitmap.Get(), m_bitmapBrush.Get(), D2D1_OPACITY_MASK_CONTENT_GRAPHICS);
+				context->SetAntialiasMode(currentAliasMode);
+			}
+			else
+				context->DrawBitmap(m_maskBitmap.Get(), dstRect);
+		}
 	}
 
 	context->SetTransform(D2D1::Matrix3x2F::Identity());
@@ -129,6 +150,31 @@ void Sample2DSceneRenderer::CacheRendering()
 	D2D_RECT_U srcRect{ 0, 0, size.width, size.height };
 	TIF(m_sceneBitmap->CopyFromBitmap(&dstPt, srcBitmap, &srcRect));
 	m_rasterized = true;
+
+	TIF(context->CreateBitmapBrush(m_sceneBitmap.Get(), &m_bitmapBrush));
+
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ee329947(v=vs.85).aspx
+	// setup opacity mask bitmap
+	ComPtr<ID2D1BitmapRenderTarget> rt;
+	context->CreateCompatibleRenderTarget(&rt);
+	ComPtr<ID2D1GradientStopCollection> gradientStopsColl;
+	D2D1_GRADIENT_STOP gradientStops[2];
+	// the colour names Black and White don't matter here; only the alpha values do. _Alpha_ masks, remember!
+	gradientStops[0].color = D2D1::ColorF(D2D1::ColorF::Black, 1.0f);
+	gradientStops[0].position = 0.0f;
+	gradientStops[1].color = D2D1::ColorF(D2D1::ColorF::White, 0.0f);
+	gradientStops[1].position = 1.0f;
+	ComPtr<ID2D1RadialGradientBrush> radialBrush;
+	TIF(rt->CreateGradientStopCollection(gradientStops, ARRAYSIZE(gradientStops), &gradientStopsColl));
+	constexpr auto maskXRadius = m_sunRadius * 2.0f, maskYRadius = m_sunRadius * 1.5f;
+	auto radialBrushprops = D2D1::RadialGradientBrushProperties(m_sunCenter, D2D1::Point2F(), maskXRadius, maskYRadius);
+	rt->CreateRadialGradientBrush(radialBrushprops, gradientStopsColl.Get(), &radialBrush);
+	rt->BeginDraw();
+	// clear it with total transparency; mind the alpha
+	rt->Clear(D2D1::ColorF(D2D1::ColorF::Black, 0.0f));
+	rt->FillEllipse(D2D1::Ellipse(m_sunCenter, maskXRadius, maskYRadius), radialBrush.Get());
+	TIF(rt->EndDraw());
+	TIF(rt->GetBitmap(&m_maskBitmap));
 }
 
 void Sample2DSceneRenderer::RenderScene(ID2D1DeviceContext2 *context)

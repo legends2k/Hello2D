@@ -22,6 +22,8 @@ namespace Hello2D
 		void StopRenderLoop();
 		void Zoom(bool zoomIn);
 		void ToggleRenderingMode();
+		void ToggleFeathering();
+
 		Concurrency::critical_section& GetCriticalSection() { return m_criticalSection; }
 
 		// IDeviceNotify

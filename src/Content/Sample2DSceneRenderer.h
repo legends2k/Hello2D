@@ -19,8 +19,10 @@ namespace Hello2D
 		void TrackingUpdate(float positionX);
 		void StopTracking();
 		bool IsTracking() { return m_tracking; }
+
 		void Zoom(bool zoomIn);
 		void ToggleRenderingMode();
+		void ToggleFeathering();
 
 	private:
 		void MakeScenery();
@@ -49,6 +51,8 @@ namespace Hello2D
 		Microsoft::WRL::ComPtr<ID2D1Layer>               m_clipLayer;
 
 		Microsoft::WRL::ComPtr<ID2D1Bitmap>              m_sceneBitmap;
+		Microsoft::WRL::ComPtr<ID2D1Bitmap>              m_maskBitmap;
+		Microsoft::WRL::ComPtr<ID2D1BitmapBrush>         m_bitmapBrush;
 
 		enum class RenderingMode
 		{
@@ -61,6 +65,12 @@ namespace Hello2D
 		bool	                                         m_loadingComplete;
 		bool	                                         m_tracking;
 		bool                                             m_rasterized = false;
+		enum class FeatheringMode
+		{
+			Off,
+			On,
+			Alpha
+		}                                                m_feathering = FeatheringMode::Off;
 
 		constexpr static auto                            m_sunRadius = 85.0f;
 		constexpr static D2D1_POINT_2F                   m_sunCenter { 355.0f, 255.0f };

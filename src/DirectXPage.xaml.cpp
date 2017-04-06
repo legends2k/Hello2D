@@ -206,6 +206,9 @@ void Hello2D::DirectXPage::Page_KeyUp(Platform::Object^ sender, Windows::UI::Xam
 	case Windows::System::VirtualKey::R:
 		m_main->ToggleRenderingMode();
 		break;
+	case Windows::System::VirtualKey::S:
+		m_main->ToggleFeathering();
+		break;
 	default:
 		e->Handled = false;
 	}

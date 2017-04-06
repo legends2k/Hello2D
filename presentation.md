@@ -52,8 +52,8 @@ It'd be good to follow along
 * It's just data about **shapes**
     + Hear path/geometry, think **shapes**
     + Data by itself
-        * Doesn't talk about how it's used
-        * Doesn't depend on hardware/device
+        * doesn't talk about how it's used
+        * doesn't depend on hardware/device
         * is plain-old data; no magic
 * Once stored this way, any _reader_ can imitate the artist
     + Reader may be a human, computer, graph plotter, …
