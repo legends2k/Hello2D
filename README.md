@@ -18,8 +18,8 @@ to generate the presentation thus
 
 ## Code
 
-The source code goes into the `/src` folder. The project is tested to work on Windows 10 with Visual Studio 2015 and 2017.
+The source code goes into the `/src` folder. The project is tested to work on Windows 10 with Visual Studio 2015, 2017 and 2019; make sure UWP development (with _Universal Windows Platform tools_) package is installed.
 
-If you are using Visual Studio 2017, it does not automatically retarget the project configuration at times and the compiler may crib at you during first build.  In that case, go to *Project Properties* → *Configuration Properties* → *General* and change the `Platform Toolset` to `Visual Studio 2017 (v141)`.  It should compile without any issues now.
+If your Visual Studio does not automatically retarget the project to your toolchain, your build will fail.  In that case, right-click the _Hello2D_ project and click _Retarget Projects_ from the pop-up menu.  Visual Studio should automatically suggest the right versions for _Windows SDK Version_, _Windows SDK Min. Version_ and _Platform Toolset_.  Accept them and it should compile without any issues now.
 
 Feel free to send a pull request to improve the code or the presentation.
